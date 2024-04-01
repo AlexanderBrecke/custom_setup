@@ -1,0 +1,121 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://github.com/alexanderbrecke/core_workspace_env_setup/schemas/config.schema.json",
+
+    "title": "Core workspace-environment configuration schema",
+    "description": "Configuration schema for a core workspace-environment",
+
+    "$comment": "Require info for where to get packages depending on platform",
+    "if": {"properties": {"platform": {"enum": ["windows"]}}},
+    "then": {"properties": {"packages": {"properties": {"packageInfo": {"items": {"required": ["wingetInfo"]}}}}}},
+    "else": {
+        "if": {"properties": {"platform": {"enum": ["linux"]}}},
+        "then": {"properties": {"packages": {"properties": {"packageInfo": {"items": {"required": ["linuxPackageInfo"]}}}}}},
+        "else": {"properties": {"packages": {"properties": {"packageInfo": {"items": {"required": ["macPackageInfo"]}}}}}}
+    },
+
+    "type": "object",
+    "required": ["platform", "terminalProfileSettings", "$schema"],
+
+    "additionalProperties": false,
+    
+    "properties": {
+
+        "$schema": {
+            "title": "Schema",
+            "description": "The schema to validate to",
+            "type": "string"
+        },
+        
+
+        "platform": {
+            "description": "The system platform you're working with: \nwindows, linux or mac",
+            "type": "string",
+            "default": "windows",
+            "enum": ["windows", "linux", "mac"]
+        },
+
+        "packageManagement": {
+            "type": "object",
+            "description": "List of programs to install",
+            "additionalProperties": false,
+            "properties": {
+                "silentInstall": {
+                    "description": "To install silently or not. \nTrue by default",
+                    "type": "boolean",
+                    "default": true
+                },
+                "packages": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "description": "Defines information for packages: \nname and installation details",                
+                        "required": ["packageName"],
+                        "properties": {
+                            "packageName": {
+                                "description": "The name of the program to install",
+                                "type": "string"
+                            },
+                            "wingetInfo": {
+                                "description": "Info for the winget installation: \n{Id: to find the correct program} \n{silentInstall: will install without popups, default true}",
+                                "type": "object",
+                                "required": ["id"],
+                                "properties": {
+                                    "id": {
+                                        "description": "The id of the winget package",
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "linuxPackageInfo": {
+                                "$comment": "TODO: Figure out what information is needed to install packages on linux"
+                            },
+                            "macPackageInfo": {
+                                "$comment": "TODO: Figure out what information is needed to install packages on mac"
+                            }
+                        }
+                    },
+                    "uniqueItems": true
+                }
+            }
+        },
+
+        "terminalProfileSettings":{
+            "description": "Settings for the terminal profile",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "addCustomTools": {
+                    "description": "To add included custom scripts for cmd or not",
+                    "type": "boolean",
+                    "default": true
+                },
+                "windowsProfile": {
+                    "description": "The windows specific information",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "profiles": {
+                            "type": "array",
+                            "description": "",
+                            "items": {
+                                "$ref": "./win_terminal_profile.schema.json"   
+                            }
+                        },
+                        "schemes": {
+                            "description": "",
+                            "type": "array",
+                            "items": {
+                                "$ref": "./win_color_scheme.schema.json"
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+}

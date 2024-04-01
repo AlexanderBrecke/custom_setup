@@ -1,0 +1,74 @@
+{
+    "$schema": "../schemas/config.schema.json",
+
+    "platform": "windows",
+
+    "packageManagement": {
+        "silentInstall": true,
+        "packages": [
+            {
+                "packageName": "Git",
+                "wingetInfo": {
+                    "id": "Git.Git"
+                }
+            },
+            {
+                "packageName": "VSCode",
+                "wingetInfo": {
+                    "id": "Microsoft.VisualStudioCode"
+                }
+            },
+            {
+                "packageName": "NVM - Node Version Manager",
+                "wingetInfo": {
+                    "id": "CoreyButler.NVMforWindows"
+                }
+            }
+        ]
+    },
+
+    "terminalProfileSettings": {
+        "addCustomTools": true,
+        "windowsProfile": {
+            "profiles": [
+                {
+                    "createOrUpdate": "create", 
+                    "makeDefault": true,        
+                    "name": "Custom cmd",
+                    "startingDirectory": "%USERPROFILE%",
+                    "commandline": "cmd.exe",
+                    "antialiasingMode": "aliased",
+                    "fontSize": 12,
+                    "fontWeight": "normal",
+                    "colorScheme": "Espresso Libre"
+                }
+            ],
+            "schemes": [
+                {
+                    "name": "Espresso Libre",
+                    "background": "#2A211C",
+                    "black": "#000000",
+                    "blue": "#0066FF",
+                    "brightBlack": "#555753",
+                    "brightBlue": "#43A8ED",
+                    "brightCyan": "#34E2E2",
+                    "brightGreen": "#9AFF87",
+                    "brightPurple": "#FF818A",
+                    "brightRed": "#EF2929",
+                    "brightWhite": "#EEEEEC",
+                    "brightYellow": "#FFFB5C",
+                    "cursorColor": "#FFFFFF",
+                    "cyan": "#06989A",
+                    "foreground": "#B8A898",
+                    "green": "#1A921C",
+                    "purple": "#C5656B",
+                    "red": "#CC0000",
+                    "selectionBackground": "#C3DCFF",
+                    "white": "#D3D7CF",
+                    "yellow": "#F0E53A"
+                }
+            ]
+        }
+    }
+
+}

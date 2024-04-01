@@ -1,0 +1,96 @@
+{
+    "type": "object",
+    "additionalProperties": false,
+
+    "$defs": {
+        "SchemePair": {
+            "description": "Contains both a light and dark color scheme for the Terminal to use, depending on the theme of the application.",
+            "properties": {
+              "light": {
+                "default": "Campbell",
+                "description": "Name of the scheme to use when the app is using light theme",
+                "type": "string"
+              },
+              "dark": {
+                "default": "Campbell",
+                "description": "Name of the scheme to use when the app is using dark theme",
+                "type": "string"
+              }
+            },
+            "type": "object"
+        }
+    },
+
+    "required": ["createOrUpdate"],
+    
+    "$comment": "If creating - require name and command line, but do not allow 'updates' \nIf updating - require updates, but do not allow 'name', 'commandline' or 'GUID'",
+    "if": {"properties": {"createOrUpdate": {"enum": ["create"]}}},
+    "then": {
+        "properties": {"updates": false},
+        "required": ["name", "commandline", "startingDirectory"]
+    },
+    "else": {
+        "properties": {"name": false, "GUID": false, "commandline": false},
+        "required": ["updates"]
+    },
+
+    "properties": {
+        "createOrUpdate": {
+            "description": "To update existing or create new profile",
+            "type": "string",
+            "enum": ["update", "create"]
+        },
+        "makeDefault": {
+            "description": "If we should make this profile default or not",
+            "type": "boolean"
+        },
+        "name": {
+            "description": "The name of the terminal profile",
+            "type": "string",
+            "default": "Custom profile name"
+        },
+        "GUID": {
+            "description": "The GUID (Globally Unique ID) of the profile being created",
+            "type": "string"
+        },
+        "updates": {
+            "description": "The GUID of the profile to update",
+            "type": "string"
+        },        
+        "commandline": {
+            "description": "The command line to use for the new terminal: \n powershell.exe, cmd.exe, etc..",
+            "type": "string",
+            "enum": ["powershell.exe", "cmd.exe"],
+            "default": "cmd.exe"
+        },
+        "startingDirectory": {
+            "type": "string",
+            "default": "%USERPROFILE%"
+        },
+        "antialiasingMode": {
+            "type": "string"
+        },
+                    
+        "fontSize" :{
+            "type": "number",
+            "default": 12,
+            "minimum": 6
+        },
+        "fontWeight": {
+            "enum": ["black", "extra-black", "semi-bold", "bold", "extra-bold", "semi-light", "light", "extra-light", "thin", "normal"],
+            "default": "normal"
+        },
+    
+        "colorScheme": {
+            "description": "The name of a color scheme to use when unfocused.",
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/SchemePair"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        }
+    }
+}
